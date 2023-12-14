@@ -85,7 +85,7 @@ public class GUI extends JFrame {
         //imageLabel1 = new JLabel(icon1);
         //imageLabel2 = new JLabel(icon2);
     	System.out.println("3");
-        // Set layout
+        // Set layout -------------------------------------------------------------------------------------------------------TU COS ZMIENIC
         setLayout(new GridLayout(1+icons.size(), 1));
 
         // Add components to the frame
