@@ -9,13 +9,12 @@ import java.awt.event.ActionListener;
 
 declare Question
   quest : String
-  ans : String
+  answers : String
 end
 
 declare GUI_state
   currentQuestion : String = "Are you ready to start?"
-  //all_ans : String[] = ["Yes","No"]
-  def_ans : String = "Yes"
+  possible: String = ""
   ans : String = ""
   img : String = ""
 end
@@ -26,609 +25,516 @@ then
 	
 	GUI_state state = new GUI_state();
 	insert(state);
-  	insert(new Question("Are you in Scotland?", "None"));
-	insert(new Question("Do you sleep in a double-wide?", "None"));
-	insert(new Question("Are you Bob or Doug McKenzie?", "None"));
-	insert(new Question("Do you live in projects?", "None"));
-	insert(new Question("Are you a hockey fan eh?", "None"));
-	insert(new Question("Do you know how to access the Stargate?", "None"));
-	insert(new Question("Are you doing that \"ironic\" hipster thing?", "None"));
-	insert(new Question("Are you the designated driver?", "None"));
-	insert(new Question("Are you at a tailgate or frat party?", "None"));
-	insert(new Question("Is your wife nagging you about the beer gut?", "None"));
-	insert(new Question("Is Guinness on tap?", "None"));
-	insert(new Question("Is it summer?", "None"));
-	insert(new Question("Are you paying in change?", "None"));
-	insert(new Question("Can you speak fluent French, in Russian?", "None"));
-	insert(new Question("Are you having a dinner party?", "None"));
-	insert(new Question("Did you just graduate college?", "None"));
-	insert(new Question("Are you a Parrothead?", "None"));
-	insert(new Question("...but did you move back in with your parents?", "None"));
-	insert(new Question("Are you trying to seem \"wordly\"?", "None"));
-	insert(new Question("Did you bring in a reusable grocery bag?", "None"));
-	insert(new Question("Are you drunk?", "None"));
-	insert(new Question("Do you truly *love* beer?", "None"));
-	insert(new Question("...$500 love?", "None"));
+	Question q = new Question("Are you in Scotland?", "Yes;No");
+  	insert(q);
+  	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-
-
-// do zrobienia, usuniecie mozliwosci wyboru 
-
-rule "Scotland"
+rule "scotland-no" //if answer was no and question is next
 when
-	q : Question(quest == "Are you in Scotland?", ans == "None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you in Scotland?", ans=="No");
+	ui: GUI();
 then
+	Question q = new Question("Do you sleep in a double-wide?","Yes;No");
+	insert(q);
 	state.setCurrentQuestion(q.getQuest());
-	ui.updateGUI(state.getCurrentQuestion());
-end	
-
-rule "Double-wide"
-when
-	q : Question(quest == "Are you in Scotland?", ans == "No")
-	q1: Question(quest == "Do you sleep in a double-wide?", ans == "None")
-	state: GUI_state()
-	ui: GUI()
-then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("Double-wide");
-	ui.updateGUI(state.getCurrentQuestion());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "Scotland-yes"
+rule "scotland-image-yes" //if answer was yes and image is next
 when
-	q : Question(quest == "Are you in Scotland?", ans == "Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you in Scotland?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Brew Dog");
+	System.out.println("brew dog");
 	state.setImg("src/main/resources/grafiki/brewdog.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you Bob or Doug McKenzie?"
+rule "doublewide-no" //if answer was no and question is next
 when
-	q: Question(quest == "Do you sleep in a double-wide?", ans == "No")
-	q1: Question(quest == "Are you Bob or Doug McKenzie?", ans =="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Do you sleep in a double-wide?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("bob or doug mckenzie");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you Bob or Doug McKenzie?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "Doublewide-yes"
+rule "doublewide-image-yes" //if answer was yes and image is next
 when
-	q : Question(quest == "Do you sleep in a double-wide?", ans == "Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Do you sleep in a double-wide?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Country Club");
+	System.out.println("country club");
 	state.setImg("src/main/resources/grafiki/countryclubmaltliquor.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Bob doug yes"
+rule "doug-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you Bob or Doug McKenzie?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you Bob or Doug McKenzie?", ans=="No");
+	ui: GUI();
+then
+	Question q = new Question("Do you live in projects?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "doug-image-yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you Bob or Doug McKenzie?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Elsinore");
+	System.out.println("elsinore");
 	state.setImg("src/main/resources/grafiki/elsinore.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Do you live in projects?"
+rule "projects-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you Bob or Doug McKenzie?", ans=="No")
-	q1: Question(quest=="Do you live in projects?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Do you live in projects?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("projects");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you a hockey fan eh?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "projects-yes"
+rule "projects-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Do you live in projects?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Do you live in projects?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Steel reserve");
-	System.out.println("Colt 45");
-	state.setImg("src/main/resources/grafiki/steelreserve.png src/main/resources/grafiki/colt45.png");
-	ui.closeGUI(state.getImg());
-	
-end
-
-rule "Are you a hockey fan eh?"
-when
-	q: Question(quest=="Do you live in projects?", ans=="No")
-	q1: Question(quest=="Are you a hockey fan eh?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
-then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("hockeyfan");
-	ui.updateGUI(state.getCurrentQuestion());
-end
-
-rule "hockey-yes"
-when
-	q: Question(quest=="Are you a hockey fan eh?", ans=="Yes")
-	state: GUI_state()
-	ui: GUI()
-then
-	System.out.println("Molson");
-	System.out.println("Labatt Blue");
-	state.setImg("src/main/resources/grafiki/molson.png src/main/resources/grafiki/labattblue.png");
+	System.out.println("colt steel");
+	state.setImg("src/main/resources/grafiki/steelreserve.png;src/main/resources/grafiki/colt45.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Do you know how to access the Stargate?"
+rule "hockey-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you a hockey fan eh?", ans=="No")
-	q1: Question(quest=="Do you know how to access the Stargate?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you a hockey fan eh?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("stargate");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Do you know how to access the Stargate?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "stargate-yes"
+rule "hockey-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest== "Do you know how to access the Stargate?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you a hockey fan eh?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Rheingold");
-	System.out.println("Esslingers");
-	state.setImg("src/main/resources/grafiki/rheingold.png src/main/resources/grafiki/esslingers.png");
+	System.out.println("molson labalt");
+	state.setImg("src/main/resources/grafiki/molson.png;src/main/resources/grafiki/labattblue.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you doing that \"ironic\" hipster thing?"
+rule "stargate-no" //if answer was no and question is next
 when
-	q: Question(quest=="Do you know how to access the Stargate?", ans=="No")
-	q1: Question(quest=="Are you doing that \"ironic\" hipster thing?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Do you know how to access the Stargate?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("hipster");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you doing that \"ironic\" hipster thing?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "hipster-yes"
+rule "stargate-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you doing that \"ironic\" hipster thing?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Do you know how to access the Stargate?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Blue Ribbon");
+	System.out.println("rheingold esslingers");
+	state.setImg("src/main/resources/grafiki/rheingold.png;src/main/resources/grafiki/esslingers.png");
+	ui.closeGUI(state.getImg());
+end
+
+rule "hipster-no" //if answer was no and question is next
+when
+	state: GUI_state(currentQuestion=="Are you doing that \"ironic\" hipster thing?", ans=="No");
+	ui: GUI();
+then
+	Question q = new Question("Are you the designated driver?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "hipster-image-yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you doing that \"ironic\" hipster thing?",ans == "Yes")
+	ui: GUI()
+then
+	System.out.println("pabst");
 	state.setImg("src/main/resources/grafiki/pabstblueribbon.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you the designated driver?"
+rule "driver-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you doing that \"ironic\" hipster thing?", ans=="No")
-	q1: Question(quest=="Are you the designated driver?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you the designated driver?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("designated driver");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you at a tailgate or frat party?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "driver-yes"
+rule "driver-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you the designated driver?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you the designated driver?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Odouls");
+	System.out.println("odouls");
 	state.setImg("src/main/resources/grafiki/odouls.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you at a tailgate or frat party?"
+rule "tailgate-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you the designated driver?", ans=="No")
-	q1: Question(quest=="Are you at a tailgate or frat party?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you at a tailgate or frat party?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("tailgate");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Is Guinness on tap?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "Is your wife nagging you about the beer gut?"
+rule "tailgate-yes" //if answer was yes and question is next
 when
-	q: Question(quest=="Are you at a tailgate or frat party?", ans=="Yes")
-	q1: Question(quest=="Is your wife nagging you about the beer gut?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you at a tailgate or frat party?", ans=="Yes");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("beer gut");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Is your wife nagging you about the beer gut?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "Is Guinness on tap?"
+rule "beergut-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you at a tailgate or frat party?", ans=="No")
-	q1: Question(quest=="Is Guinness on tap?", ans=="None")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Is your wife nagging you about the beer gut?",ans == "Yes")
 	ui: GUI()
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("guinness on tap");
-	ui.updateGUI(state.getCurrentQuestion());
-end
-
-rule "beer gut-yes"
-when
-	q: Question(quest=="Is your wife nagging you about the beer gut?", ans=="Yes")
-	state: GUI_state()
-	ui: GUI()
-then
-	System.out.println("Amstel light");
-	System.out.println("Miller lite");
-	System.out.println("Coors light");
-	System.out.println("Bud light");
-	state.setImg("src/main/resources/grafiki/amstellight.png src/main/resources/grafiki/millerlite.png src/main/resources/grafiki/coorslight.png src/main/resources/grafiki/budlight.png");
+	System.out.println("amstel miller coors budlight");
+	state.setImg("src/main/resources/grafiki/amstellight.png;src/main/resources/grafiki/millerlite.png;src/main/resources/grafiki/coorslight.png;src/main/resources/grafiki/budlight.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "beer gut-no"
+rule "beergut-image-no" //if answer was no and image is next
 when
-	q: Question(quest=="Is your wife nagging you about the beer gut?", ans=="No")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Is your wife nagging you about the beer gut?",ans == "No")
 	ui: GUI()
 then
-	System.out.println("Amstel beer");
-	System.out.println("miller high life");
-	System.out.println("Coors");
-	System.out.println("Budweiser");
-	System.out.println("Moose light lime");
-	state.setImg("src/main/resources/grafiki/amstelbeer.png src/main/resources/grafiki/millerhighlife.png src/main/resources/grafiki/coors.png src/main/resources/grafiki/budweiser.png src/main/resources/grafiki/mooselightlime.png");
+	System.out.println("amstel miller coors budweiser moose");
+	state.setImg("src/main/resources/grafiki/amstelbeer.png;src/main/resources/grafiki/millerhighlife.png;src/main/resources/grafiki/coors.png;src/main/resources/grafiki/budweiser.png;src/main/resources/grafiki/mooselightlime.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "guinness-yes"
+rule "guinness-no" //if answer was no and question is next
 when
-	q: Question(quest=="Is Guinness on tap?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Is Guinness on tap?", ans=="No");
+	ui: GUI();
+then
+	Question q = new Question("Is it summer?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "guinness-image-yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Is Guinness on tap?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Guinness");
+	System.out.println("guinness");
 	state.setImg("src/main/resources/grafiki/guinness.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Is it summer?"
+rule "summer-no" //if answer was no and question is next
 when
-	q: Question(quest=="Is Guinness on tap?", ans=="No")
-	q1: Question(quest=="Is it summer?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Is it summer?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("summer");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Can you speak fluent French, in Russian?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "Are you paying in change?"
+rule "summer-yes" //if answer was yes and question is next
 when
-	q: Question(quest=="Is it summer?", ans=="Yes")
-	q1: Question(quest=="Are you paying in change?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Is it summer?", ans=="Yes");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("change");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you paying in change?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "change-yes"
+rule "change-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you paying in change?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you paying in change?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Tequiza");
-	System.out.println("Modelo especial");
-	state.setImg("src/main/resources/grafiki/tequiza.png src/main/resources/grafiki/modelospecial.png");
+	System.out.println("tequiza modelo");
+	state.setImg("src/main/resources/grafiki/tequiza.png;src/main/resources/grafiki/modelospecial.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "change-no"
+rule "change-image-no" //if answer was no and image is next
 when
-	q: Question(quest=="Are you paying in change?", ans=="No")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you paying in change?",ans == "No")
 	ui: GUI()
 then
-	System.out.println("Corona extra");
+	System.out.println("corona");
 	state.setImg("src/main/resources/grafiki/coronaextra.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Can you speak fluent French, in Russian?"
+rule "french-no" //if answer was no and question is next
 when
-	q: Question(quest=="Is it summer?", ans=="No")
-	q1: Question(quest=="Can you speak fluent French, in Russian?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Can you speak fluent French, in Russian?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("french in russian");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you having a dinner party?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "frenchrussian-yes"
+rule "french-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Can you speak fluent French, in Russian?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Can you speak fluent French, in Russian?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Dos Equis");
+	System.out.println("dosequis");
 	state.setImg("src/main/resources/grafiki/cervezadosequis.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you having a dinner party?"
+rule "dinner-no" //if answer was no and question is next
 when
-	q: Question(quest=="Can you speak fluent French, in Russian?", ans=="No")
-	q1: Question(quest=="Are you having a dinner party?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you having a dinner party?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("dinner party");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Did you just graduate college?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "dinnerparty-yes"
+rule "dinner-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you having a dinner party?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you having a dinner party?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Blue Moon");
-	System.out.println("Samuel Adams");
-	System.out.println("New Belgium");
-	System.out.println("Gordon Biersch");
-	state.setImg("src/main/resources/grafiki/bluemoon.png src/main/resources/grafiki/samueladams.png src/main/resources/grafiki/newbelgiumbrewing.png src/main/resources/grafiki/gordonbiersch.png");
+	System.out.println("blue samuel belgium gordon");
+	state.setImg("src/main/resources/grafiki/bluemoon.png;src/main/resources/grafiki/samueladams.png;src/main/resources/grafiki/newbelgiumbrewing.png;src/main/resources/grafiki/gordonbiersch.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Did you just graduate college?"
+rule "graduate-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you having a dinner party?", ans=="No")
-	q1: Question(quest=="Did you just graduate college?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Did you just graduate college?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("graduate college");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you a Parrothead?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "...but did you move back in with your parents?"
+rule "graduate-yes" //if answer was yes and question is next
 when
-	q: Question(quest=="Did you just graduate college?", ans=="Yes")
-	q1: Question(quest=="...but did you move back in with your parents?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Did you just graduate college?", ans=="Yes");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("move back in");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("...but did you move back in with your parents?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "Are you a Parrothead?"
+rule "parents-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Did you just graduate college?", ans=="No")
-	q1: Question(quest=="Are you a Parrothead?", ans=="None")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="...but did you move back in with your parents?",ans == "Yes")
 	ui: GUI()
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("parrothead");
-	ui.updateGUI(state.getCurrentQuestion());
-end
-
-rule "movebackin-yes"
-when
-	q: Question(quest=="...but did you move back in with your parents?", ans=="Yes")
-	state: GUI_state()
-	ui: GUI()
-then
-	System.out.println("Mickeys");
-	System.out.println("Old Milwaukee");
-	System.out.println("Olde English 800");
-	state.setImg("src/main/resources/grafiki/mickeys.png src/main/resources/grafiki/oldmilwaukee.png src/main/resources/grafiki/oldeenglish800.png");
+	System.out.println("mickeys milwaukee olde");
+	state.setImg("src/main/resources/grafiki/mickeys.png;src/main/resources/grafiki/oldmilwaukee.png;src/main/resources/grafiki/oldeenglish800.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "movebackin-no"
+rule "parents-image-no" //if answer was no and image is next
 when
-	q: Question(quest=="...but did you move back in with your parents?", ans=="No")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="...but did you move back in with your parents?",ans == "No")
 	ui: GUI()
 then
-	System.out.println("Rolling rock");
-	System.out.println("Becks");
-	System.out.println("Heineken");
-	state.setImg("src/main/resources/grafiki/rollingrockextrapale.png src/main/resources/grafiki/becks.png src/main/resources/grafiki/heineken.png");
+	System.out.println("rolling becks heineken");
+	state.setImg("src/main/resources/grafiki/rollingrockextrapale.png;src/main/resources/grafiki/becks.png;src/main/resources/grafiki/heineken.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "parrothead-yes"
+rule "parrothead-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you a Parrothead?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you a Parrothead?", ans=="No");
+	ui: GUI();
+then
+	Question q = new Question("Are you trying to seem \"wordly\"?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "parrothead-image-yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="Are you a Parrothead?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Landshark");
+	System.out.println("landshark");
 	state.setImg("src/main/resources/grafiki/landshark.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you trying to seem \"wordly\"?"
+rule "worldly-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you a Parrothead?", ans=="No")
-	q1: Question(quest=="Are you trying to seem \"wordly\"?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you trying to seem \"wordly\"?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("seem worldy");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Did you bring in a reusable grocery bag?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "seemworldy-yes"
+rule "worldly-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you trying to seem \"wordly\"?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you trying to seem \"wordly\"?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Fosters");
-	System.out.println("Red stripe");
-	System.out.println("Carlsberg");
-	state.setImg("src/main/resources/grafiki/fosters.png src/main/resources/grafiki/redstripe.png src/main/resources/grafiki/carlsberg.png");
+	System.out.println("fosters redstripe carlsberg");
+	state.setImg("src/main/resources/grafiki/fosters.png;src/main/resources/grafiki/redstripe.png;src/main/resources/grafiki/carlsberg.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Did you bring in a reusable grocery bag?"
+rule "bag-no" //if answer was no and question is next
 when
-	q: Question(quest=="Are you trying to seem \"wordly\"?", ans=="No")
-	q1: Question(quest=="Did you bring in a reusable grocery bag?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Did you bring in a reusable grocery bag?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("reusable grocery bag");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Are you drunk?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "reusable grocery bag-yes"
+rule "bag-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Did you bring in a reusable grocery bag?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Did you bring in a reusable grocery bag?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Red hook");
-	System.out.println("Sierra nevada");
-	System.out.println("Harp Lager");
-	System.out.println("Newcastle brown ale");
-	System.out.println("Stella Artois");
-	state.setImg("src/main/resources/grafiki/redhook.png src/main/resources/grafiki/sierranevada.png src/main/resources/grafiki/harplager.png src/main/resources/grafiki/newcastlebrownale.png src/main/resources/grafiki/stellaartois.png");
+	System.out.println("hook sierra harp newcastle stella");
+	state.setImg("src/main/resources/grafiki/redhook.png;src/main/resources/grafiki/sierranevada.png;src/main/resources/grafiki/harplager.png;src/main/resources/grafiki/newcastlebrownale.png;src/main/resources/grafiki/stellaartois.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Are you drunk?"
+rule "drunk-no" //if answer was no and question is next
 when
-	q: Question(quest=="Did you bring in a reusable grocery bag?", ans=="No")
-	q1: Question(quest=="Are you drunk?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
+	state: GUI_state(currentQuestion=="Are you drunk?", ans=="No");
+	ui: GUI();
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("drunk");
-	ui.updateGUI(state.getCurrentQuestion());
+	Question q = new Question("Do you truly *love* beer?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
 end
 
-rule "are you drunk yes"
+rule "drunk-image-yes" //if answer was yes and image is next
 when
-	q: Question(quest=="Are you drunk?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Are you drunk?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("Tecate");
-	System.out.println("Moosehead");
-	state.setImg("src/main/resources/grafiki/cervezatecate.png src/main/resources/grafiki/mooseheadlager.png");
+	System.out.println("tecate moosehead");
+	state.setImg("src/main/resources/grafiki/cervezatecate.png;src/main/resources/grafiki/mooseheadlager.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "Do you truly *love* beer?"
+rule "love-image-no" //if answer was no and image is next
 when
-	q: Question(quest=="Are you drunk?", ans=="No")
-	q1: Question(quest=="Do you truly *love* beer?", ans=="None")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Do you truly *love* beer?",ans == "No")
 	ui: GUI()
 then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("truly love beer");
-	ui.updateGUI(state.getCurrentQuestion());
-end
-
-rule "...$500 love?"
-when
-	q: Question(quest=="Do you truly *love* beer?", ans=="Yes")
-	q1: Question(quest=="...$500 love?", ans=="None")
-	state: GUI_state()
-	ui: GUI()
-then
-	state.setCurrentQuestion(q1.getQuest());
-	System.out.println("500$ love");
-	ui.updateGUI(state.getCurrentQuestion());
-end
-
-rule "do you truly love beer no"
-when
-	q: Question(quest=="Do you truly *love* beer?", ans=="No")
-	state: GUI_state()
-	ui: GUI()
-then
-	System.out.println("Michelob ultra");
-	System.out.println("Bass");
-	state.setImg("src/main/resources/grafiki/michelobultra.png src/main/resources/grafiki/bass.png");
+	System.out.println("michelob bass");
+	state.setImg("src/main/resources/grafiki/michelobultra.png;src/main/resources/grafiki/bass.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "500$ yes"
+rule "love-yes" //if answer was yes and question is next
 when
-	q: Question(quest=="...$500 love?", ans=="Yes")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="Do you truly *love* beer?", ans=="Yes");
+	ui: GUI();
+then
+	Question q = new Question("...$500 love?","Yes;No");
+	insert(q);
+	state.setCurrentQuestion(q.getQuest());
+	state.setPossible(q.getAnswers());
+	ui.updateGUI(state.getCurrentQuestion(),state.getPossible());
+end
+
+rule "love500-image-yes" //if answer was yes and image is next
+when
+	state: GUI_state(currentQuestion=="...$500 love?",ans == "Yes")
 	ui: GUI()
 then
-	System.out.println("unnamed premium beer");
+	System.out.println("weird bottle");
 	state.setImg("src/main/resources/grafiki/wtf.png");
 	ui.closeGUI(state.getImg());
 end
 
-rule "500$ no"
+rule "love500-image-no" //if answer was no and image is next
 when
-	q: Question(quest=="...$500 love?", ans=="No")
-	state: GUI_state()
+	state: GUI_state(currentQuestion=="...$500 love?",ans == "No")
 	ui: GUI()
 then
-	System.out.println("Alaskan amber");
-	System.out.println("Ale asylum");
-	System.out.println("Dogfish head");
-	System.out.println("Double diamond");
-	System.out.println("Cantillon");
-	System.out.println("Stone");
-	System.out.println("Full Sail");
-	System.out.println("Hair dog");
-	System.out.println("Clipper city");
-	state.setImg("src/main/resources/grafiki/alaskanamber.png src/main/resources/grafiki/aleasylum.png src/main/resources/grafiki/dogfishcraftbrewedales.png src/main/resources/grafiki/doublediamond.png src/main/resources/grafiki/cantillon.png src/main/resources/grafiki/stonebrewingco.png src/main/resources/grafiki/fullsail.png src/main/resources/grafiki/hairdog.png src/main/resources/grafiki/clippercity.png");
-	//state.setImg("src/main/resources/grafiki/doublediamong.png");
+	System.out.println("alaskan ale dogfish double cantillon stone full hair clipper");
+	state.setImg("src/main/resources/grafiki/alaskanamber.png;src/main/resources/grafiki/aleasylum.png;src/main/resources/grafiki/dogfishcraftbrewedales.png;src/main/resources/grafiki/doublediamond.png;src/main/resources/grafiki/cantillon.png;src/main/resources/grafiki/stonebrewingco.png;src/main/resources/grafiki/fullsail.png;src/main/resources/grafiki/hairdog.png;src/main/resources/grafiki/clippercity.png");
 	ui.closeGUI(state.getImg());
 end
-
 rule "Retrieve answer" //at the end of drl file
 when
 	state : GUI_state()
@@ -637,19 +543,10 @@ when
 then
 System.out.println(state.getCurrentQuestion());
 	state.setAns(answer);
-	q.setAns(answer);
+	//q.setAns(answer);
 	update(state);
-	update(q);
+	//update(q);
 	retract(answer);
 	System.out.println(state.getAns());
 	
 end
-/*rule "Default"
-when
-	state : GUI_state()
-	ui : GUI()
-then
-	//System.out.println(state.getCurrentQuestion());
-	System.out.println("default "+state.getCurrentQuestion());
- 	ui.updateGUI(state.getCurrentQuestion());
-end*/
