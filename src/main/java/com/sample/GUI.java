@@ -15,113 +15,121 @@ import org.kie.api.logger;
 import org.kie.api.logger.KieRuntimeLogger;
 
 public class GUI extends JFrame {
-	private ButtonGroup buttonGroup;
-	private JLabel label;
-    private JRadioButton yesButton = new JRadioButton("Yes");
-    private JRadioButton noButton = new JRadioButton("No");
-    private JButton okButton = new JButton("Next");
-    public GUI(String message, KieSession kSession) {
-    	label = new JLabel(message);
+	private ButtonGroup group;
+	private JLabel question = new JLabel("");
+	private JButton okButton = new JButton("Next");
+	private ArrayList<JRadioButton> buttons = new ArrayList<JRadioButton>(); 
+    private ArrayList<String> buttonNames = new ArrayList<String>();
+    private KieSession kSession;
+    public GUI(KieSession k){
+    	this.kSession = k;
     	setTitle("What should I drink? Beer edition");
     	setSize(450,250);
     	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	setLocationRelativeTo(null);
-    	
-    	buttonGroup = new ButtonGroup();
-    	buttonGroup.add(yesButton);
-    	buttonGroup.add(noButton);
+    	setLayout(new GridLayout(4,1));
     	
     	okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (yesButton.isSelected() || noButton.isSelected()) {
-                    //displayMessage("Next Question");
-                	
+                if (checkSelected()) {
+                	//displayMessage("Next Question");
                     kSession.insert(getAnswer());
-                    deselect();
+                    System.out.println(getAnswer());
+                    group.clearSelection();
                     kSession.fireAllRules();
                     
                     System.out.println("Inserted current selection");
                 } else {
-                    //displayMessage("Please select an option.");
+                    System.out.println("no way");
                 }
             }
         });
-        
-        setLayout(new GridLayout(4, 1));
-
-        add(label);
-        add(yesButton);
-        add(noButton);
-        add(okButton);
+    }
+    /**
+     * Sets the class attributes to those sent by drools
+     */
+    public void updateGUI(String currentQuestion, String possibleAnswers) {
+    	this.remove(question);
+    	for(JRadioButton button: buttons) {
+    		this.remove(button);
+    	}
+    	this.remove(okButton);
+    	
+    	this.setSize(450,250);
+    	this.setLayout(new GridLayout(2+possibleAnswers.split(";").length,1));
+    	this.question = new JLabel(currentQuestion);
+    	this.buttons = new ArrayList<JRadioButton>();
+    	this.group = new ButtonGroup();
+    	//question name is added
+    	this.add(question);
+    	//buttons are cleared
+    	buttons = new ArrayList<JRadioButton>(); 
+    	for(String name : possibleAnswers.split(";")) {
+    		//buttons are added to the gui
+    		
+    		buttons.add(new JRadioButton(name));
+    		this.add(buttons.get(buttons.size()-1));
+    		group.add(buttons.get(buttons.size()-1));
+    	}
+    	this.add(okButton);
+    	this.revalidate();
+    	this.repaint();
+    }
+    public boolean checkSelected() {
+    	for(int i=0;i<buttons.size();i++) {
+    		if(buttons.get(i).isSelected()) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    public String getAnswer() {
+    	for(int i=0;i<buttons.size();i++) {
+    		if(buttons.get(i).isSelected()) {
+    			return buttons.get(i).getText();
+    		}
+    	}
+    	return "";
+    }
+    public void displayMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
     }
     public void imageGUI(String img) {
-    	remove(label);
-    	remove(yesButton);
-    	remove(noButton);
+    	remove(question);
+    	for(JRadioButton button: buttons) {
+    		remove(button);
+    	}
     	remove(okButton);
-    	System.out.println("1");
     	JLabel stringLabel = new JLabel("You might like these beers:");
     	ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
-    	ArrayList<String> imgpaths = sendImagePaths(img);
+    	ArrayList<String> imgpaths = sendImagePaths(img,";");
     	for(String path: imgpaths) {
     		BufferedImage image = loadImage(path);
     		images.add(image);
     		System.out.println(path);
     	}
-    	System.out.println("2");
-        // Load images (replace these with your image file paths)
-        //BufferedImage image1 = loadImage("image1.jpg");
-        //BufferedImage image2 = loadImage("image2.jpg");
+
     	ArrayList<ImageIcon> icons = new ArrayList<ImageIcon>();
-        // Create ImageIcon from BufferedImage
+
     	for(BufferedImage image: images) {
     		ImageIcon icon = new ImageIcon(image);
     		icons.add(icon);
     	}
-        //ImageIcon icon1 = new ImageIcon(image1);
-        //ImageIcon icon2 = new ImageIcon(image2);
 
-        //imageLabel1 = new JLabel(icon1);
-        //imageLabel2 = new JLabel(icon2);
-    	System.out.println("3");
-        // Set layout -------------------------------------------------------------------------------------------------------TU COS ZMIENIC
-        setLayout(new GridLayout(1+icons.size(), 1));
 
-        // Add components to the frame
+        setLayout(new GridLayout(0, 2));
+
         add(stringLabel);
         for(ImageIcon icon: icons) {
         	add(new JLabel(icon));
         }
-        System.out.println("4");
-        // Set frame properties
+
         setSize(1000, 1000);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         this.setVisible(true);
-    }
-    public ArrayList<String> sendImagePaths(String images){
-    	 String[] parts = images.split(" ");
-         ArrayList<String> resultList = new ArrayList<>();
-         for (String part : parts) {
-             resultList.add(part);
-         }
-         return resultList;
-    }
-    public void updateGUI(String labelText) {
-    	label.setText(labelText);
-    }
-    public void displayMessage(String message) {
-        JOptionPane.showMessageDialog(this, message);
-    }
-    public String getAnswer() {
-    	if(yesButton.isSelected()) {
-    		return "Yes";
-    	}else
-    		return "No";
-    }
-    private void deselect() {
-    	buttonGroup.clearSelection();
     }
     public void closeGUI(String paths) {
     	dispose();
@@ -135,5 +143,12 @@ public class GUI extends JFrame {
         }
         return null;
     }
-
+    public ArrayList<String> sendImagePaths(String images, String between){
+   	 String[] parts = images.split(between);
+        ArrayList<String> resultList = new ArrayList<>();
+        for (String part : parts) {
+            resultList.add(part);
+        }
+        return resultList;
+   }
 }
