@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 declare Question
   quest : String
   answers : String
+  userAnswered : String
 end
 
 declare GUI_state
@@ -21,10 +22,9 @@ rule "Initialization"
 when
 	ui : GUI()
 then
-	
 	GUI_state state = new GUI_state();
 	insert(state);
-	Question q = new Question("Are you in Scotland?", "Yes;No");
+	Question q = new Question("Are you in Scotland?", "Yes;No","None");
   	insert(q);
   	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -36,7 +36,7 @@ when
 	state: GUI_state(currentQuestion=="Are you in Scotland?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Do you sleep in a double-wide?","Yes;No");
+	Question q = new Question("Do you sleep in a double-wide?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -58,7 +58,7 @@ when
 	state: GUI_state(currentQuestion=="Do you sleep in a double-wide?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you Bob or Doug McKenzie?","Yes;No");
+	Question q = new Question("Are you Bob or Doug McKenzie?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -80,7 +80,7 @@ when
 	state: GUI_state(currentQuestion=="Are you Bob or Doug McKenzie?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Do you live in projects?","Yes;No");
+	Question q = new Question("Do you live in projects?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -102,7 +102,7 @@ when
 	state: GUI_state(currentQuestion=="Do you live in projects?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you a hockey fan eh?","Yes;No");
+	Question q = new Question("Are you a hockey fan eh?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -124,7 +124,7 @@ when
 	state: GUI_state(currentQuestion=="Are you a hockey fan eh?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Do you know how to access the Stargate?","Yes;No");
+	Question q = new Question("Do you know how to access the Stargate?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -146,7 +146,7 @@ when
 	state: GUI_state(currentQuestion=="Do you know how to access the Stargate?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you doing that \"ironic\" hipster thing?","Yes;No");
+	Question q = new Question("Are you doing that \"ironic\" hipster thing?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -168,7 +168,7 @@ when
 	state: GUI_state(currentQuestion=="Are you doing that \"ironic\" hipster thing?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you the designated driver?","Yes;No");
+	Question q = new Question("Are you the designated driver?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -190,7 +190,7 @@ when
 	state: GUI_state(currentQuestion=="Are you the designated driver?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you at a tailgate or frat party?","Yes;No");
+	Question q = new Question("Are you at a tailgate or frat party?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -212,7 +212,7 @@ when
 	state: GUI_state(currentQuestion=="Are you at a tailgate or frat party?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Is Guinness on tap?","Yes;No");
+	Question q = new Question("Is Guinness on tap?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -224,7 +224,7 @@ when
 	state: GUI_state(currentQuestion=="Are you at a tailgate or frat party?", ans=="Yes");
 	ui: GUI();
 then
-	Question q = new Question("Is your wife nagging you about the beer gut?","Yes;No");
+	Question q = new Question("Is your wife nagging you about the beer gut?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -256,7 +256,7 @@ when
 	state: GUI_state(currentQuestion=="Is Guinness on tap?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Is it summer?","Yes;No");
+	Question q = new Question("Is it summer?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -278,7 +278,7 @@ when
 	state: GUI_state(currentQuestion=="Is it summer?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Can you speak fluent French, in Russian?","Yes;No");
+	Question q = new Question("Can you speak fluent French, in Russian?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -290,7 +290,7 @@ when
 	state: GUI_state(currentQuestion=="Is it summer?", ans=="Yes");
 	ui: GUI();
 then
-	Question q = new Question("Are you paying in change?","Yes;No");
+	Question q = new Question("Are you paying in change?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -322,7 +322,7 @@ when
 	state: GUI_state(currentQuestion=="Can you speak fluent French, in Russian?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you having a dinner party?","Yes;No");
+	Question q = new Question("Are you having a dinner party?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -344,7 +344,7 @@ when
 	state: GUI_state(currentQuestion=="Are you having a dinner party?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Did you just graduate college?","Yes;No");
+	Question q = new Question("Did you just graduate college?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -366,7 +366,7 @@ when
 	state: GUI_state(currentQuestion=="Did you just graduate college?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you a Parrothead?","Yes;No");
+	Question q = new Question("Are you a Parrothead?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -378,7 +378,7 @@ when
 	state: GUI_state(currentQuestion=="Did you just graduate college?", ans=="Yes");
 	ui: GUI();
 then
-	Question q = new Question("...but did you move back in with your parents?","Yes;No");
+	Question q = new Question("...but did you move back in with your parents?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -410,7 +410,7 @@ when
 	state: GUI_state(currentQuestion=="Are you a Parrothead?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you trying to seem \"wordly\"?","Yes;No");
+	Question q = new Question("Are you trying to seem \"wordly\"?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -432,7 +432,7 @@ when
 	state: GUI_state(currentQuestion=="Are you trying to seem \"wordly\"?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Did you bring in a reusable grocery bag?","Yes;No");
+	Question q = new Question("Did you bring in a reusable grocery bag?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -454,7 +454,7 @@ when
 	state: GUI_state(currentQuestion=="Did you bring in a reusable grocery bag?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Are you drunk?","Yes;No");
+	Question q = new Question("Are you drunk?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -476,7 +476,7 @@ when
 	state: GUI_state(currentQuestion=="Are you drunk?", ans=="No");
 	ui: GUI();
 then
-	Question q = new Question("Do you truly *love* beer?","Yes;No");
+	Question q = new Question("Do you truly *love* beer?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -508,7 +508,7 @@ when
 	state: GUI_state(currentQuestion=="Do you truly *love* beer?", ans=="Yes");
 	ui: GUI();
 then
-	Question q = new Question("...$500 love?","Yes;No");
+	Question q = new Question("...$500 love?","Yes;No","None");
 	insert(q);
 	state.setCurrentQuestion(q.getQuest());
 	state.setPossible(q.getAnswers());
@@ -542,8 +542,10 @@ when
 then
 System.out.println(state.getCurrentQuestion());
 	state.setAns(answer);
+	q.setUserAnswered(answer);
 	//q.setAns(answer);
 	update(state);
+	update(q);
 	//update(q);
 	retract(answer);
 	System.out.println(state.getAns());
