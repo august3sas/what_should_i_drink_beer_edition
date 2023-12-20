@@ -103,6 +103,7 @@ public class GUI extends JFrame {
     	}
     	remove(okButton);
     	JLabel stringLabel = new JLabel("You might like these beers:");
+    	JLabel emptyLabel = new JLabel(" ");
     	ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
     	ArrayList<String> imgpaths = sendImagePaths(img,";");
     	for(String path: imgpaths) {
@@ -122,6 +123,7 @@ public class GUI extends JFrame {
         setLayout(new GridLayout(0, 2));
 
         add(stringLabel);
+        add(emptyLabel);
         for(ImageIcon icon: icons) {
         	add(new JLabel(icon));
         }
