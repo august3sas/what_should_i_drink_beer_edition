@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
 declare Question
   quest : String
   answers : String
-  userAnswered : String
+  userAnswered : String 
 end
 
 declare GUI_state
@@ -549,5 +549,4 @@ System.out.println(state.getCurrentQuestion());
 	//update(q);
 	retract(answer);
 	System.out.println(state.getAns());
-	
 end
