@@ -5,7 +5,7 @@ import javax.swing.*;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.logger;
+
 import org.kie.api.logger.KieRuntimeLogger;
 
 public class DroolsTest{
@@ -15,7 +15,6 @@ public class DroolsTest{
         KieServices ks = KieServices.Factory.get();
     	KieContainer kContainer = ks.getKieClasspathContainer();
         KieSession kSession = kContainer.newKieSession("ksession-rules");
-        KieRuntimeLogger kLogger=ks.getLoggers().newFileLogger(kSession, "test");
         
         GUI ui = new GUI(kSession);
         ui.setVisible(true);
