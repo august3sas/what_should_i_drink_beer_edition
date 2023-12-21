@@ -1,12 +1,9 @@
 package com.sample;
 
-import java.util.ArrayList;
-import javax.swing.*;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 
-import org.kie.api.logger.KieRuntimeLogger;
 
 public class DroolsTest{
 	
