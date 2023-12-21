@@ -103,7 +103,9 @@ public class GUI extends JFrame {
     	}
     	remove(okButton);
     	JLabel stringLabel = new JLabel("You might like these beers:");
-    	JLabel emptyLabel = new JLabel(" ");
+    	stringLabel.setHorizontalAlignment(JLabel.CENTER);
+    	JLabel emptyLabel1 = new JLabel(" ");
+    	JLabel emptyLabel2 = new JLabel(" ");
     	ArrayList<BufferedImage> images = new ArrayList<BufferedImage>();
     	ArrayList<String> imgpaths = sendImagePaths(img,";");
     	for(String path: imgpaths) {
@@ -120,15 +122,16 @@ public class GUI extends JFrame {
     	}
 
 
-        setLayout(new GridLayout(0, 2));
+        setLayout(new GridLayout(0, 3));
 
         add(stringLabel);
-        add(emptyLabel);
+        add(emptyLabel1);
+        add(emptyLabel2);
         for(ImageIcon icon: icons) {
         	add(new JLabel(icon));
         }
 
-        setSize(1000, 1000);
+        setSize(750, 250+(int)Math.ceil((double) images.size()/3)*200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         this.setVisible(true);
